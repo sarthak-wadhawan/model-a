@@ -1,0 +1,3 @@
+artifacts/
+*.jsonl
+.DS_Store
