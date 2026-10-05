@@ -83,6 +83,49 @@ For live prediction and historical replay using Alpaca IEX data:
 - Alpaca API key ID
 - Alpaca API secret key
 
+## Run Model A on a New Computer
+
+For live prediction on a fresh Linux (or macOS) computer:
+
+```bash
+# Clone the repository
+git clone https://github.com/sarthak-wadhawan/model-a.git
+cd model-a
+
+# Create a virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Upgrade pip
+python -m pip install --upgrade pip
+
+# Install dependencies
+pip install -e .
+
+# Configure Alpaca credentials
+export APCA_API_KEY_ID="your_alpaca_key"
+export APCA_API_SECRET_KEY="your_alpaca_secret"
+
+# Run live prediction
+python3 live_model_a.py --symbol SPY
+```
+
+**Important notes**:
+- NO retraining is needed - the frozen model and scaler ship with the repository
+- NO historical events.csv is needed - live prediction uses Alpaca IEX API directly
+- The frozen model is in `models/model_a_v1/model.pt`
+- The frozen scaler is in `models/model_a_v1/scaler.json`
+
+**Example symbols**:
+```bash
+python3 live_model_a.py --symbol SPY   # Trained symbol
+python3 live_model_a.py --symbol NVDA  # Experimental (out-of-distribution)
+python3 live_model_a.py --symbol AAPL  # Experimental (out-of-distribution)
+python3 live_model_a.py --symbol MSFT  # Experimental (out-of-distribution)
+```
+
+**Note**: Model A was trained on SPY data. Predictions on other symbols are experimental out-of-distribution tests.
+
 ## Fresh Installation
 
 ### macOS/Linux
