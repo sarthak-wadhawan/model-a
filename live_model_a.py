@@ -255,6 +255,20 @@ def load_frozen_model(model_path: Path, scaler_path: Path, seed: int = 42) -> tu
     return model, scaler
 
 
+def get_model_paths() -> tuple[Path, Path]:
+    """Get model and scaler paths, preferring versioned deployment paths."""
+    # Canonical deployment paths
+    model_path = Path("models/model_a_v1/model.pt")
+    scaler_path = Path("models/model_a_v1/scaler.json")
+    
+    # Fall back to legacy paths for backward compatibility
+    if not model_path.exists() or not scaler_path.exists():
+        model_path = Path("artifacts/model_a/models/model.pt")
+        scaler_path = Path("artifacts/model_a/scalers/scaler.json")
+    
+    return model_path, scaler_path
+
+
 def predict_with_frozen_model(model: FixedMLP, scaler: Scaler, 
                               features: List[float]) -> Dict[str, Any]:
     """Make prediction using frozen model."""
@@ -430,8 +444,9 @@ def run_live_prediction(symbol: str):
     for summary in minute_summaries:
         features.extend(summary.to_feature_vector())
     
-    model_path = Path("artifacts/model_a/models/model.pt")
-    scaler_path = Path("artifacts/model_a/scalers/scaler.json")
+    model_path, scaler_path = get_model_paths()
+    print(f"Loading model from: {model_path}")
+    print(f"Loading scaler from: {scaler_path}")
     
     model, scaler = load_frozen_model(model_path, scaler_path)
     

@@ -5,8 +5,16 @@ artifacts/
 
 # Secrets
 .env
-.env.*
+.env.local
+.env.*.local
 *.key
+
+# Exception: allow example env file
+!.env.example
+
+# Exception: allow versioned model assets
+!models/model_a_v1/
+
 
 # Python
 __pycache__/
